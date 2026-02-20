@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -12,9 +13,10 @@ class CompanyForm
     {
         return $schema
             ->components([
-                TextInput::make('user_id')
+                Select::make('user_id')
+                    ->relationship('user', 'name')
                     ->required()
-                    ->numeric(),
+                    ->searchable(),
                 TextInput::make('company_name')
                     ->required(),
                 TextInput::make('website')

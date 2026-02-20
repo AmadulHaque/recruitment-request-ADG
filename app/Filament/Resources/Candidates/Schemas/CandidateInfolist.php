@@ -13,6 +13,8 @@ class CandidateInfolist
             ->components([
                 TextEntry::make('user_id')
                     ->numeric(),
+                TextEntry::make('recruiter_id')
+                    ->placeholder('-'),
                 TextEntry::make('headline')
                     ->placeholder('-'),
                 TextEntry::make('expected_salary_min')
@@ -30,9 +32,19 @@ class CandidateInfolist
                     ->placeholder('-'),
                 TextEntry::make('availability')
                     ->placeholder('-'),
+                TextEntry::make('availability_weeks')
+                    ->numeric()
+                    ->placeholder('-'),
                 TextEntry::make('about_me')
                     ->placeholder('-')
                     ->columnSpanFull(),
+                TextEntry::make('cover_letter')
+                    ->placeholder('-')
+                    ->columnSpanFull(),
+                TextEntry::make('has_consented')
+                    ->badge()
+                    ->color(fn (bool $state): string => $state ? 'success' : 'danger')
+                    ->formatStateUsing(fn (bool $state): string => $state ? 'Yes' : 'No'),
                 TextEntry::make('profile_photo')
                     ->placeholder('-'),
                 TextEntry::make('cv_file')

@@ -6,6 +6,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -15,17 +16,23 @@ class CandidatesTable
     {
         return $table
             ->columns([
-                TextColumn::make('user_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('User')
+                    ->searchable()
                     ->sortable(),
+                TextColumn::make('recruiter_id')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('headline')
                     ->searchable(),
                 TextColumn::make('expected_salary_min')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('expected_salary_max')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('preferred_job_type')
                     ->searchable(),
                 TextColumn::make('preferred_location')
@@ -35,10 +42,17 @@ class CandidatesTable
                     ->sortable(),
                 TextColumn::make('availability')
                     ->searchable(),
+                TextColumn::make('availability_weeks')
+                    ->numeric()
+                    ->sortable(),
+                IconColumn::make('has_consented')
+                    ->boolean(),
                 TextColumn::make('profile_photo')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('cv_file')
-                    ->searchable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CompanyJobController;
 use App\Http\Controllers\Api\CandidateProfileController;
+use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\JobApplicationController;
 
 Route::prefix('auth')->group(function () {
@@ -35,5 +36,8 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     Route::patch('applications/{application}/status', [JobApplicationController::class, 'updateStatus']);
     Route::patch('applications/{application}/schedule', [JobApplicationController::class, 'scheduleInterview']);
     Route::patch('applications/{application}/final', [JobApplicationController::class, 'finalize']);
+    
+    // User Management
+    Route::put('users/{user}', [AdminUserController::class, 'update']);
 });
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Companies\Tables;
+namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -9,24 +9,20 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class CompaniesTable
+class UsersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('User')
-                    ->searchable()
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable(),
+                TextColumn::make('email_verified_at')
+                    ->dateTime()
                     ->sortable(),
-                TextColumn::make('company_name')
-                    ->searchable(),
-                TextColumn::make('website')
-                    ->searchable(),
-                TextColumn::make('location')
-                    ->searchable(),
-                TextColumn::make('logo')
-                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -35,6 +31,13 @@ class CompaniesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('role')
+                    ->badge()
+                    ->searchable(),
+                TextColumn::make('profile_photo_path')
+                    ->searchable(),
+                TextColumn::make('phone')
+                    ->searchable(),
             ])
             ->filters([
                 //

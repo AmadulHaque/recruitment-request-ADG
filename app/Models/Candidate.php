@@ -11,6 +11,7 @@ class Candidate extends Model
 
     protected $fillable = [
         'user_id',
+        'recruiter_id',
         'headline',
         'expected_salary_min',
         'expected_salary_max',
@@ -18,9 +19,12 @@ class Candidate extends Model
         'preferred_location',
         'total_experience_years',
         'availability',
+        'availability_weeks',
         'about_me',
+        'cover_letter',
         'profile_photo',
         'cv_file',
+        'has_consented',
     ];
 
     public function user()

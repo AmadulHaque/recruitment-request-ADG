@@ -36,6 +36,7 @@ class CandidateProfileService
             'preferred_location',
             'total_experience_years',
             'availability',
+            'availability_weeks',
             'about_me',
             'profile_photo',
             'cv_file',
