@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Schemas;
 
 use App\Enums\UserRole;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -23,7 +24,6 @@ class UserForm
                     ->required()
                     ->maxLength(255)
                     ->unique(ignoreRecord: true),
-                DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()
                     ->maxLength(255)
@@ -33,7 +33,9 @@ class UserForm
                     ->options(UserRole::class)
                     ->default('candidate')
                     ->required(),
-                TextInput::make('profile_photo_path'),
+                FileUpload::make('profile_photo_path')
+                    ->image()
+                    ->avatar(),
                 TextInput::make('phone')
                     ->tel(),
             ]);

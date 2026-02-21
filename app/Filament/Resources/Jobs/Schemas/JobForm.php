@@ -18,9 +18,10 @@ class JobForm
     {
         return $schema
             ->components([
-                TextInput::make('company_id')
+                Select::make('company_id')
+                    ->relationship('company', 'company_name')
                     ->required()
-                    ->numeric(),
+                    ->searchable(),
                 TextInput::make('job_title')
                     ->required(),
                 TextInput::make('job_category'),

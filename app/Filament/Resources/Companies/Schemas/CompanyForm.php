@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -22,7 +23,8 @@ class CompanyForm
                 TextInput::make('website')
                     ->url(),
                 TextInput::make('location'),
-                TextInput::make('logo'),
+                FileUpload::make('logo')
+                    ->image(),
                 Textarea::make('about')
                     ->columnSpanFull(),
             ]);

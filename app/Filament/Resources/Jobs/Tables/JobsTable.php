@@ -15,9 +15,8 @@ class JobsTable
     {
         return $table
             ->columns([
-                TextColumn::make('company_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('company.company_name')
+                    ->searchable(),
                 TextColumn::make('job_title')
                     ->searchable(),
                 TextColumn::make('job_category')

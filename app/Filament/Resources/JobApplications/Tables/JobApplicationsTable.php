@@ -15,11 +15,13 @@ class JobApplicationsTable
     {
         return $table
             ->columns([
-                TextColumn::make('job_id')
-                    ->numeric()
+                TextColumn::make('job.job_title')
+                    ->label('Job Title')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('candidate_id')
-                    ->numeric()
+                TextColumn::make('user.name')
+                    ->label('User')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('application_status')
                     ->badge()

@@ -16,12 +16,16 @@ class JobApplicationForm
     {
         return $schema
             ->components([
-                TextInput::make('job_id')
+                Select::make('job_id')
+                    ->relationship('job', 'job_title')
                     ->required()
-                    ->numeric(),
-                TextInput::make('candidate_id')
-                    ->required()
-                    ->numeric(),
+                    ->searchable(),
+                Select::make('candidate_id')
+                    ->relationship('candidate', 'id')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->user->name)
+                    ->searchable()
+                    ->preload()
+                    ->required(),
                 Select::make('application_status')
                     ->options(ApplicationStatus::class)
                     ->default('applied')
