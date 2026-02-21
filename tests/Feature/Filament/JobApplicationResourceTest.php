@@ -3,6 +3,7 @@
 namespace Tests\Feature\Filament;
 
 use App\Filament\Resources\JobApplications\JobApplicationResource;
+use App\Models\JobApplication;
 use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\Job;
@@ -49,6 +50,35 @@ class JobApplicationResourceTest extends TestCase
 
         $this->actingAs($admin)
             ->get(JobApplicationResource::getUrl('create'))
+            ->assertSuccessful();
+    }
+
+    public function test_can_render_view_job_application_page()
+    {
+        $admin = User::factory()->create([
+            'role' => UserRole::ADMIN,
+        ]);
+
+        $company = Company::create([
+            'user_id' => $admin->id,
+            'company_name' => 'Test Company',
+        ]);
+        
+        $job = Job::factory()->create([
+            'company_id' => $company->id,
+        ]);
+        
+        $candidateUser = User::factory()->create(['role' => UserRole::CANDIDATE]);
+        $candidate = Candidate::factory()->create(['user_id' => $candidateUser->id]);
+
+        $application = JobApplication::create([
+            'job_id' => $job->id,
+            'candidate_id' => $candidate->id,
+            'meeting_url' => 'https://meet.google.com/test',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(JobApplicationResource::getUrl('view', ['record' => $application]))
             ->assertSuccessful();
     }
 }

@@ -22,7 +22,7 @@ class CreateJobDTO
         public ?string $benefits,
         public string $urgency,
         public string $status,
-        public ?array $attachments,
+        public  $attachments,
         public array $skills
     ) {
     }

@@ -15,6 +15,9 @@ class CompaniesTable
     {
         return $table
             ->columns([
+                 TextColumn::make('id')
+                    ->label('Company-ID')
+                    ->searchable(),
                 TextColumn::make('user.name')
                     ->label('User')
                     ->searchable()

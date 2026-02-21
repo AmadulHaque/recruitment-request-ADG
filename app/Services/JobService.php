@@ -10,6 +10,9 @@ use App\Models\Skill;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+
 class JobService
 {
     public function index(int $companyId, array $filters = []): LengthAwarePaginator
@@ -30,6 +33,12 @@ class JobService
 
     public function store(CreateJobDTO $dto): Job
     {
+        $attachments = null;
+
+        if ($dto->attachments instanceof UploadedFile) {
+            $attachments = $dto->attachments->store('job-attachments', 'public');
+        } 
+
         $job = Job::create([
             'company_id' => $dto->company_id,
             'job_title' => $dto->job_title,
@@ -48,7 +57,7 @@ class JobService
             'benefits' => $dto->benefits,
             'urgency' => $dto->urgency,
             'status' => $dto->status,
-            'attachments' => $dto->attachments,
+            'attachments' => $attachments,
         ]);
 
         if (!empty($dto->skills)) {
@@ -61,7 +70,7 @@ class JobService
 
     public function update(Job $job, UpdateJobDTO $dto): Job
     {
-        $job->update([
+        $data = [
             'job_title' => $dto->job_title,
             'job_category' => $dto->job_category,
             'job_type' => $dto->job_type,
@@ -78,8 +87,17 @@ class JobService
             'benefits' => $dto->benefits,
             'urgency' => $dto->urgency,
             'status' => $dto->status,
-            'attachments' => $dto->attachments,
-        ]);
+        ];
+
+        if ($dto->attachments instanceof UploadedFile) {
+             // Delete old attachment if exists and is a single file path string
+             if ($job->attachments && is_string($job->attachments)) {
+                 Storage::disk('public')->delete($job->attachments);
+             }
+             $data['attachments'] = $dto->attachments->store('job-attachments', 'public');
+        } 
+
+        $job->update($data);
 
         if (!empty($dto->skills)) {
             $skillIds = $this->resolveSkills($dto->skills);

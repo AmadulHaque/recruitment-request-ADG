@@ -22,7 +22,17 @@ class JobApplicationController extends Controller
 
     public function index(Request $request)
     {
-        $applications = $this->service->forCandidate($request->user()->candidate);
+        $filters = $request->only([
+            'status', 
+            'job_id', 
+            'date_from', 
+            'date_to', 
+            'sort_by', 
+            'sort_direction', 
+            'per_page'
+        ]);
+
+        $applications = $this->service->forCandidate($request->user()->candidate, $filters);
         return JobApplicationResource::collection($applications);
     }
 
@@ -35,7 +45,30 @@ class JobApplicationController extends Controller
     public function show(Request $request, JobApplication $application)
     {
         $this->authorize('view', $application);
-        return new JobApplicationResource($application->load(['job', 'candidate']));
+        return new JobApplicationResource($application->load(['job', 'candidate', 'timeline']));
+    }
+
+    public function uploadDocument(Request $request, JobApplication $application)
+    {
+        $this->authorize('uploadDocument', $application);
+
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120',
+        ]);
+
+        $file = $request->file('file');
+        $path = $file->store('application-documents', 'public');
+
+        $documents = $application->documents ?? [];
+        $documents[] = [
+            'name' => $file->getClientOriginalName(), 
+            'path' => $path, 
+            'uploaded_at' => now()->toIso8601String()
+        ];
+
+        $application = $this->service->uploadDocuments($application, $documents);
+
+        return new JobApplicationResource($application);
     }
 
     public function updateStatus(UpdateApplicationStatusRequest $request, JobApplication $application)
@@ -50,7 +83,12 @@ class JobApplicationController extends Controller
     {
         $this->authorize('update', $application);
         $v = $request->validated();
-        $application = $this->service->schedule($application, new \DateTimeImmutable($v['interview_date']), $v['interview_note'] ?? null);
+        $application = $this->service->schedule(
+            $application,
+            new \DateTimeImmutable($v['interview_date']),
+            $v['interview_note'] ?? null,
+            $v['meeting_url'] ?? null
+        );
         return new JobApplicationResource($application);
     }
 

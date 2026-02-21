@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Jobs\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Storage;
 
 class JobInfolist
 {
@@ -54,6 +55,9 @@ class JobInfolist
                     ->badge(),
                 TextEntry::make('attachments')
                     ->placeholder('-')
+                    ->formatStateUsing(fn ($state) => $state ? Storage::disk('public')->url($state) : null)
+                    ->url(fn ($state) => $state ? Storage::disk('public')->url($state) : null)
+                    ->openUrlInNewTab()
                     ->columnSpanFull(),
                 TextEntry::make('created_at')
                     ->dateTime()

@@ -14,7 +14,7 @@ class CandidateProfileService
         return DB::transaction(function () use ($user, $data) {
             $candidate = Candidate::updateOrCreate(
                 ['user_id' => $user->id],
-                collect($data)->except(['skills'])->toArray()
+                collect($data)->except(['skills','profile_photo','cv_file'])->toArray()
             );
 
             if (isset($data['skills'])) {
@@ -22,6 +22,15 @@ class CandidateProfileService
                 $candidate->skills()->sync($skillIds);
             }
 
+            if (isset($data['profile_photo'])) {
+                $candidate->profile_photo = $data['profile_photo']->store('profile_photos', 'public');
+            }
+
+            // Handle CV file upload
+            if (isset($data['cv_file'])) {
+                $candidate->cv_file = $data['cv_file']->store('cv_files', 'public');
+            }   
+            $candidate->save();
             return $candidate;
         });
     }

@@ -7,10 +7,16 @@ use App\Http\Controllers\Api\CandidateProfileController;
 use App\Http\Controllers\Api\AdminUserController;
 use App\Http\Controllers\Api\JobApplicationController;
 
+
+Route::get('/login', function () {
+    return response()->json(['message' => 'Unauthorized'],401);
+})->name('login');
+
 Route::prefix('auth')->group(function () {
     Route::post('company/register', [AuthController::class, 'registerCompany']);
     Route::post('company/login', [AuthController::class, 'loginCompany']);
     Route::post('candidate/login', [AuthController::class, 'loginCandidate']);
+    Route::post('candidate/recruiter/login', [AuthController::class, 'loginRecruiter']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
@@ -29,6 +35,8 @@ Route::middleware(['auth:sanctum', 'role:candidate'])->prefix('candidate')->grou
     Route::put('profile', [CandidateProfileController::class, 'update']);
     Route::post('apply/{job}', [JobApplicationController::class, 'apply']);
     Route::get('applications', [JobApplicationController::class, 'index']);
+    Route::get('applications/{application}', [JobApplicationController::class, 'show']);
+    Route::post('applications/{application}/documents', [JobApplicationController::class, 'uploadDocument']);
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(function () {

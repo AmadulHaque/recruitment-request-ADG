@@ -17,6 +17,8 @@ class JobApplication extends Model
         'interview_date',
         'interview_note',
         'final_status',
+        'meeting_url',
+        'documents',
     ];
 
     protected function casts(): array
@@ -25,6 +27,7 @@ class JobApplication extends Model
             'application_status' => ApplicationStatus::class,
             'final_status' => ApplicationFinalStatus::class,
             'interview_date' => 'datetime',
+            'documents' => 'array',
         ];
     }
 
@@ -36,6 +39,11 @@ class JobApplication extends Model
     public function candidate()
     {
         return $this->belongsTo(Candidate::class);
+    }
+
+    public function timeline()
+    {
+        return $this->hasMany(JobApplicationTimeline::class)->orderBy('occurred_at', 'asc');
     }
 }
 

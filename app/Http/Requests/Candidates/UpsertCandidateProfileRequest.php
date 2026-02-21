@@ -25,9 +25,8 @@ class UpsertCandidateProfileRequest extends FormRequest
             'availability_weeks' => ['nullable', 'integer', 'min:0'],
             'about_me' => ['nullable', 'string'],
             'cover_letter' => ['nullable', 'string'],
-            'profile_photo' => ['nullable', 'string', 'max:255'],
-            'cv_file' => ['nullable', 'string', 'max:255'],
-            'has_consented' => ['required', 'boolean', 'accepted'],
+            'profile_photo' => ['nullable', 'image', 'max:2048'],
+            'cv_file' => ['nullable', 'file', 'mimes:pdf,docx,png,jpeg,svg,webp'],
             'skills' => ['nullable', 'array'],
             'skills.*' => ['string', 'max:100'],
         ];

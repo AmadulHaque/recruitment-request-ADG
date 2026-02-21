@@ -32,7 +32,7 @@ class StoreJobRequest extends FormRequest
             'benefits' => ['nullable', 'string'],
             'urgency' => ['required', 'in:low,medium,high'],
             'status' => ['required', 'in:draft,active,closed'],
-            'attachments' => ['nullable', 'array'],
+            'attachments' => ['nullable', 'file'],
         ];
     }
 }

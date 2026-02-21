@@ -16,6 +16,7 @@ class ScheduleInterviewRequest extends FormRequest
         return [
             'interview_date' => ['required', 'date'],
             'interview_note' => ['nullable', 'string'],
+            'meeting_url' => ['nullable', 'url'],
         ];
     }
 }

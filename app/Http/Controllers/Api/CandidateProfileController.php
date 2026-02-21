@@ -21,8 +21,14 @@ class CandidateProfileController extends Controller
     public function show(Request $request)
     {
         $candidate = $request->user()->candidate;
+
+        if (!$candidate) {
+            return response()->json(['message' => 'Candidate profile not found'], 404);
+        }
+
         $candidate->load(['skills', 'educations', 'workExperiences']);
         $candidate->profile_completeness = $this->service->completeness($candidate);
+
         return new CandidateResource($candidate);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class JobResource extends JsonResource
 {
@@ -28,7 +29,7 @@ class JobResource extends JsonResource
             'benefits' => $this->benefits,
             'urgency' => $this->urgency?->value ?? $this->urgency,
             'status' => $this->status?->value ?? $this->status,
-            'attachments' => $this->attachments,
+            'attachments' => Storage::url( $this->attachments),
             'skills' => $this->whenLoaded('skills', fn () => $this->skills->pluck('name')),
             'created_at' => $this->created_at?->toISOString(),
         ];

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\CompanyRegisterRequest;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
-use App\Services\AuthService;
 use Illuminate\Http\Request;
+use App\Services\AuthService;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\LoginRecruiterRequest;
+use App\Http\Requests\Auth\CompanyRegisterRequest;
 
 class AuthController extends Controller
 {
@@ -66,9 +67,27 @@ class AuthController extends Controller
         ]);
     }
 
+    // 
+
+    public function loginRecruiter(LoginRecruiterRequest $request)
+    {
+        $v = $request->validated();
+        $payload = $this->authService->loginRecruiter($v['recruiter_id']);
+        return response()->json([
+            'success' => true,
+            'token' => $payload['token'],
+            'user' => [
+                'id' => $payload['user']->id,
+                'name' => $payload['user']->name,
+                'email' => $payload['user']->email,
+                'role' => $payload['user']->role->value,
+            ],
+        ]);
+    }
+
     public function logout(Request $request)
     {
         $this->authService->logout($request->user());
         return response()->json(['success' => true]);
-        }
+    }
 }

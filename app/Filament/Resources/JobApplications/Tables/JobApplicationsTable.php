@@ -19,8 +19,8 @@ class JobApplicationsTable
                     ->label('Job Title')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('user.name')
-                    ->label('User')
+                TextColumn::make('candidate.user.name')
+                    ->label('Candidate Name')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('application_status')

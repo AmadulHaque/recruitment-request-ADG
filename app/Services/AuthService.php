@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\Company;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Candidate;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService
@@ -52,6 +53,22 @@ class AuthService
         }
         $token = $user->createToken('candidate-api')->plainTextToken;
         return ['user' => $user, 'token' => $token];
+    }
+
+    public function loginRecruiter($recruiterId): array
+    {
+
+        $candidate = Candidate::where('recruiter_id', $recruiterId)->first();
+        if (!$candidate) {
+            abort(422, 'Invalid credentials');
+        }
+        $user = User::where('id', $candidate->user_id)->where('role', UserRole::CANDIDATE)->first();
+        if (!$user) {
+            abort(422, 'Invalid credentials');
+        }
+        $token = $user->createToken('recruiter-api')->plainTextToken;
+        return ['user' => $user, 'token' => $token];
+
     }
 
     public function logout(User $user): void

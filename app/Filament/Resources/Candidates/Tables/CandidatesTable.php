@@ -16,6 +16,12 @@ class CandidatesTable
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->label('Candidate-ID')
+                    ->searchable(),
+                TextColumn::make('recruiter_id')
+                    ->label('Recruiter-ID')
+                    ->searchable(),
                 TextColumn::make('user.name')
                     ->label('User')
                     ->searchable()
@@ -45,8 +51,6 @@ class CandidatesTable
                 TextColumn::make('availability_weeks')
                     ->numeric()
                     ->sortable(),
-                IconColumn::make('has_consented')
-                    ->boolean(),
                 TextColumn::make('profile_photo')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
